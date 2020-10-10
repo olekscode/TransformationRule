@@ -4,6 +4,12 @@ Class {
 	#category : #'TransformationRule-Tests'
 }
 
+{ #category : #'as yet unclassified' }
+TransformationRuleTest >> mockMethod [
+
+	(1 to: 10) doWithIndex: [ :each :i | each + i ]
+]
+
 { #category : #tests }
 TransformationRuleTest >> testAntecedent [
 	| expression rule expectedAST |
@@ -19,6 +25,30 @@ TransformationRuleTest >> testAntecedent [
 	
 	self assert: rule antecedent equals: expression.
 	self assert: rule antecedentAST equals: expectedAST.
+]
+
+{ #category : #tests }
+TransformationRuleTest >> testApplyTo [
+	| oldCode newCode ruleOldToNew ruleNewToOld |
+	
+	oldCode := 'mockMethod
+
+	(1 to: 10) doWithIndex: [ :each :i | each + i ]'.
+	
+	newCode := 'mockMethod
+
+	(1 to: 10) withIndexDo: [ :each :i | each + i ]'.
+	
+	ruleOldToNew := ('`@rec doWithIndex: `@arg' -> '`@rec withIndexDo: `@arg') asTransformationRule.
+	ruleNewToOld := ('`@rec withIndexDo: `@arg' -> '`@rec doWithIndex: `@arg') asTransformationRule.
+	
+	self assert: (self class >> #mockMethod) sourceCode equals: oldCode.
+	
+	ruleOldToNew applyTo: (self class >> #mockMethod).
+	self assert: (self class >> #mockMethod) sourceCode equals: newCode.
+	
+	ruleNewToOld applyTo: (self class >> #mockMethod).
+	self assert: (self class >> #mockMethod) sourceCode equals: oldCode.
 ]
 
 { #category : #tests }
