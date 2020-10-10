@@ -79,12 +79,6 @@ TransformationRule >> consequentAST [
 	^ consequentAST
 ]
 
-{ #category : #'helper methods' }
-TransformationRule >> dummyMethod [
-
-	#( 1 2 3 ) withIndexDo: [ :item :index | item + index ]
-]
-
 { #category : #testing }
 TransformationRule >> isValid [
 	"Neither antecedent nor consequent can be empty"
