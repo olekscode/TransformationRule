@@ -1,7 +1,7 @@
 # TransformationRule
 
 [![Build Status](https://travis-ci.org/olekscode/TransformationRule.svg?branch=master)](https://travis-ci.org/olekscode/TransformationRule)
-[![Build status](https://ci.appveyor.com/api/projects/status/t7lxsakunjyl0dan?svg=true)](https://ci.appveyor.com/project/olekscode/TransformationRule)
+[![Build status](https://ci.appveyor.com/api/projects/status/xyq3u97y1dg1br6f?svg=true)](https://ci.appveyor.com/project/olekscode/transformationrule)
 [![Coverage Status](https://coveralls.io/repos/github/olekscode/TransformationRule/badge.svg?branch=master)](https://coveralls.io/github/olekscode/TransformationRule?branch=master)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/olekscode/TransformationRule/master/LICENSE)
 
