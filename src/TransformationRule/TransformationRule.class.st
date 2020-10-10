@@ -63,6 +63,11 @@ TransformationRule >> applyTo: aMethod [
 	]
 ]
 
+{ #category : #testing }
+TransformationRule >> canBeAppliedTo: aMethod [
+	^ (self nodesMatchedByAntecedentIn: aMethod) isNotEmpty
+]
+
 { #category : #accessing }
 TransformationRule >> consequent [
 	^ consequent
@@ -90,6 +95,22 @@ TransformationRule >> isValid [
 		ifTrue: [ ^ false ].
 		
 	^ true
+]
+
+{ #category : #testing }
+TransformationRule >> nodesMatchedByAntecedentIn: aMethod [
+	| matches searcher |
+	
+	matches := OrderedCollection new.
+	searcher := RBParseTreeSearcher new.
+	
+	searcher
+		matchesTree: antecedentTree
+		do: [ :node :answer | matches add: (node -> answer) ].
+		
+	searcher executeTree: aMethod parseTree.
+	
+	^ matches
 ]
 
 { #category : #parsing }
