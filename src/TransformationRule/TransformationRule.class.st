@@ -45,22 +45,12 @@ TransformationRule >> antecedentTree [
 
 { #category : #operations }
 TransformationRule >> applyTo: aMethod [
-	| node rule |
-	node := aMethod parseTree.
+	| transformedCode |
+	transformedCode := self transformedSourceCodeOf: aMethod.
 	
-	rule := RBParseTreeRewriter new 
-		replaceTree: antecedentTree
-		withTree: consequentTree;
-		yourself.
-	
-	RecursionStopper during: [
-		(rule executeTree: node)
-			ifFalse: [ ^ Error signal: 'Failed to transform the method' ].
-		"node replaceWith: rule tree. "
-		Author 
-			useAuthor: 'TransformationRule'
-			during: [aMethod origin compile: node formattedCode classified: aMethod protocol].	
-	]
+	Author 
+		useAuthor: 'TransformationRule'
+		during: [ aMethod origin compile: transformedCode classified: aMethod protocol ].
 ]
 
 { #category : #testing }
@@ -127,4 +117,21 @@ TransformationRule >> printOn: aStream [
 		nextPutAll: ' -> ';
 		nextPutAll: consequent;
 		nextPut: $).
+]
+
+{ #category : #operations }
+TransformationRule >> transformedSourceCodeOf: aMethod [
+	| node rule |
+	node := aMethod parseTree.
+	
+	rule := RBParseTreeRewriter new 
+		replaceTree: antecedentTree
+		withTree: consequentTree;
+		yourself.
+	
+	RecursionStopper during: [
+		(rule executeTree: node)
+			ifFalse: [ ^ Error signal: 'Failed to transform the method' ] ].
+
+	^ node formattedCode
 ]
