@@ -49,3 +49,7 @@ rule consequentAST. "RBMessageNode(`@rec withIndexDo: `@arg)"
 
 rule isValid. "true"
 ```
+
+```Smalltalk
+rule applyTo: (Object >> #copySameFrom:).
+```
