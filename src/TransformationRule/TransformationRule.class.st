@@ -4,8 +4,8 @@ Class {
 	#instVars : [
 		'antecedent',
 		'consequent',
-		'antecedentAST',
-		'consequentAST'
+		'antecedentTree',
+		'consequentTree'
 	],
 	#category : #TransformationRule
 }
@@ -35,12 +35,12 @@ TransformationRule >> antecedent [
 { #category : #accessing }
 TransformationRule >> antecedent: aString [
 	antecedent := aString.
-	antecedentAST := self parseExpression: antecedent.
+	antecedentTree := self parseExpression: antecedent.
 ]
 
 { #category : #accessing }
-TransformationRule >> antecedentAST [
-	^ antecedentAST
+TransformationRule >> antecedentTree [
+	^ antecedentTree
 ]
 
 { #category : #operations }
@@ -49,8 +49,8 @@ TransformationRule >> applyTo: aMethod [
 	node := aMethod parseTree.
 	
 	rule := RBParseTreeRewriter new 
-		replace: antecedent
-		with: consequent;
+		replaceTree: antecedentTree
+		withTree: consequentTree;
 		yourself.
 	
 	RecursionStopper during: [
@@ -71,12 +71,12 @@ TransformationRule >> consequent [
 { #category : #accessing }
 TransformationRule >> consequent: aString [
 	consequent := aString.
-	consequentAST := self parseExpression: consequent.
+	consequentTree := self parseExpression: consequent.
 ]
 
 { #category : #accessing }
-TransformationRule >> consequentAST [
-	^ consequentAST
+TransformationRule >> consequentTree [
+	^ consequentTree
 ]
 
 { #category : #testing }

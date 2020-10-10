@@ -24,7 +24,7 @@ TransformationRuleTest >> testAntecedent [
 		arguments: { RBPatternVariableNode named: '`@arg' }.
 	
 	self assert: rule antecedent equals: expression.
-	self assert: rule antecedentAST equals: expectedAST.
+	self assert: rule antecedentTree equals: expectedAST.
 ]
 
 { #category : #tests }
@@ -65,7 +65,7 @@ TransformationRuleTest >> testConsequent [
 		arguments: { RBPatternVariableNode named: '`@arg' }.
 	
 	self assert: rule consequent equals: expression.
-	self assert: rule consequentAST equals: expectedAST.
+	self assert: rule consequentTree equals: expectedAST.
 ]
 
 { #category : #tests }
