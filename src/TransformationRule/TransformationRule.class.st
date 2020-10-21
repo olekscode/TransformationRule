@@ -5,7 +5,8 @@ Class {
 		'antecedent',
 		'consequent',
 		'antecedentTree',
-		'consequentTree'
+		'consequentTree',
+		'parseError'
 	],
 	#category : #TransformationRule
 }
@@ -33,7 +34,7 @@ TransformationRule >> antecedent [
 ]
 
 { #category : #accessing }
-TransformationRule >> antecedent: aString [
+TransformationRule >> antecedent: aString [		
 	antecedent := aString.
 	antecedentTree := self parseExpression: antecedent.
 ]
@@ -74,6 +75,12 @@ TransformationRule >> consequentTree [
 	^ consequentTree
 ]
 
+{ #category : #initialization }
+TransformationRule >> initialize [
+	super initialize.
+	parseError := false.
+]
+
 { #category : #testing }
 TransformationRule >> isValid [
 	"Neither antecedent nor consequent can be empty"
@@ -105,7 +112,9 @@ TransformationRule >> nodesMatchedByAntecedentIn: aMethod [
 
 { #category : #parsing }
 TransformationRule >> parseExpression: aString [
-	^ RBParser parseRewriteExpression: aString
+	^ RBParser
+		parseRewriteExpression: aString
+		onError: [ ^ nil ].
 ]
 
 { #category : #printing }
