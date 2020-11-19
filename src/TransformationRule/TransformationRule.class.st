@@ -61,6 +61,11 @@ TransformationRule >> consequent: aString [
 	consequent := aString
 ]
 
+{ #category : #testing }
+TransformationRule >> hasParsingError [
+	^ parseError
+]
+
 { #category : #initialization }
 TransformationRule >> initialize [
 	super initialize.
@@ -110,7 +115,9 @@ TransformationRule >> parseConsequentTree [
 TransformationRule >> parseExpression: aString [
 	^ RBParser
 		parseRewriteExpression: aString
-		onError: [ ^ nil ].
+		onError: [ 
+			parseError := true.
+			^ nil ].
 ]
 
 { #category : #printing }
