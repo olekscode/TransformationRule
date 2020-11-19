@@ -19,6 +19,17 @@ TransformationRule class >> antecedent: anAntecedentString consequent: aConseque
 		yourself.
 ]
 
+{ #category : #'instance creation' }
+TransformationRule class >> fromSton: stonReader [
+	| rule |
+	rule := super fromSton: stonReader.
+	
+	rule parseAntecedent.
+	rule parseConsequent.
+	
+	^ rule
+]
+
 { #category : #comparing }
 TransformationRule >> = anObject [
 	anObject class = self class
@@ -36,12 +47,17 @@ TransformationRule >> antecedent [
 { #category : #accessing }
 TransformationRule >> antecedent: aString [		
 	antecedent := aString.
-	antecedentTree := self parseExpression: antecedent.
+	self parseAntecedent.
 ]
 
 { #category : #accessing }
 TransformationRule >> antecedentTree [
 	^ antecedentTree
+]
+
+{ #category : #accessing }
+TransformationRule >> antecedentTree: anObject [
+	antecedentTree := anObject
 ]
 
 { #category : #operations }
@@ -67,12 +83,17 @@ TransformationRule >> consequent [
 { #category : #accessing }
 TransformationRule >> consequent: aString [
 	consequent := aString.
-	consequentTree := self parseExpression: consequent.
+	self parseConsequent.
 ]
 
 { #category : #accessing }
 TransformationRule >> consequentTree [
 	^ consequentTree
+]
+
+{ #category : #accessing }
+TransformationRule >> consequentTree: anObject [
+	consequentTree := anObject
 ]
 
 { #category : #initialization }
@@ -111,6 +132,16 @@ TransformationRule >> nodesMatchedByAntecedentIn: aMethod [
 ]
 
 { #category : #parsing }
+TransformationRule >> parseAntecedent [
+	antecedentTree := self parseExpression: antecedent.
+]
+
+{ #category : #parsing }
+TransformationRule >> parseConsequent [
+	consequentTree := self parseExpression: consequent.
+]
+
+{ #category : #parsing }
 TransformationRule >> parseExpression: aString [
 	^ RBParser
 		parseRewriteExpression: aString
@@ -126,6 +157,14 @@ TransformationRule >> printOn: aStream [
 		nextPutAll: ' -> ';
 		nextPutAll: consequent;
 		nextPut: $).
+]
+
+{ #category : #'ston persistence' }
+TransformationRule >> stonOn: stonWriter [
+	stonWriter writeObject: (self copy
+		antecedentTree: nil;
+		consequentTree: nil;
+		yourself)
 ]
 
 { #category : #operations }

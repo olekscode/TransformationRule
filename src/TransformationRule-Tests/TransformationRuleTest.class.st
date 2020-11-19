@@ -113,3 +113,19 @@ TransformationRuleTest >> testIsValid [
 	self deny: rule3 isValid.
 	self deny: rule4 isValid.
 ]
+
+{ #category : #tests }
+TransformationRuleTest >> testSton [
+	| originalObject stonString recoveredObject |
+	
+	originalObject := ('`@rec doWithIndex: `@arg' -> '`@rec withIndexDo: `@arg') asTransformationRule.
+	
+	stonString := STON toString: originalObject.
+	recoveredObject := STON fromString: stonString.
+	
+	self assert: recoveredObject equals: originalObject.
+	
+	"We need to check ASTs separately because they are ignored by equality operator"
+	self assert: recoveredObject antecedentTree equals: originalObject antecedentTree.
+	self assert: recoveredObject consequentTree equals: originalObject consequentTree.
+]
