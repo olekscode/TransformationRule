@@ -36,11 +36,6 @@ TransformationRule >> antecedent: aString [
 	antecedent := aString
 ]
 
-{ #category : #accessing }
-TransformationRule >> antecedentTree [
-	^ antecedentTree
-]
-
 { #category : #operations }
 TransformationRule >> applyTo: aMethod [
 	| transformedCode |
@@ -64,11 +59,6 @@ TransformationRule >> consequent [
 { #category : #accessing }
 TransformationRule >> consequent: aString [
 	consequent := aString
-]
-
-{ #category : #accessing }
-TransformationRule >> consequentTree [
-	^ consequentTree
 ]
 
 { #category : #initialization }
