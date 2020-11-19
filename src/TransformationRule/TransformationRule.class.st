@@ -4,8 +4,6 @@ Class {
 	#instVars : [
 		'antecedent',
 		'consequent',
-		'antecedentTree',
-		'consequentTree',
 		'parseError'
 	],
 	#category : #TransformationRule
@@ -17,17 +15,6 @@ TransformationRule class >> antecedent: anAntecedentString consequent: aConseque
 		antecedent: anAntecedentString;
 		consequent: aConsequentString;
 		yourself.
-]
-
-{ #category : #'instance creation' }
-TransformationRule class >> fromSton: stonReader [
-	| rule |
-	rule := super fromSton: stonReader.
-	
-	rule parseAntecedent.
-	rule parseConsequent.
-	
-	^ rule
 ]
 
 { #category : #comparing }
@@ -46,18 +33,12 @@ TransformationRule >> antecedent [
 
 { #category : #accessing }
 TransformationRule >> antecedent: aString [		
-	antecedent := aString.
-	self parseAntecedent.
+	antecedent := aString
 ]
 
 { #category : #accessing }
 TransformationRule >> antecedentTree [
 	^ antecedentTree
-]
-
-{ #category : #accessing }
-TransformationRule >> antecedentTree: anObject [
-	antecedentTree := anObject
 ]
 
 { #category : #operations }
@@ -82,18 +63,12 @@ TransformationRule >> consequent [
 
 { #category : #accessing }
 TransformationRule >> consequent: aString [
-	consequent := aString.
-	self parseConsequent.
+	consequent := aString
 ]
 
 { #category : #accessing }
 TransformationRule >> consequentTree [
 	^ consequentTree
-]
-
-{ #category : #accessing }
-TransformationRule >> consequentTree: anObject [
-	consequentTree := anObject
 ]
 
 { #category : #initialization }
@@ -123,7 +98,7 @@ TransformationRule >> nodesMatchedByAntecedentIn: aMethod [
 	searcher := RBParseTreeSearcher new.
 	
 	searcher
-		matchesTree: antecedentTree
+		matchesTree: self parseAntecedentTree
 		do: [ :node :answer | matches add: (node -> answer) ].
 		
 	searcher executeTree: aMethod parseTree.
@@ -132,13 +107,13 @@ TransformationRule >> nodesMatchedByAntecedentIn: aMethod [
 ]
 
 { #category : #parsing }
-TransformationRule >> parseAntecedent [
-	antecedentTree := self parseExpression: antecedent.
+TransformationRule >> parseAntecedentTree [
+	^ self parseExpression: antecedent
 ]
 
 { #category : #parsing }
-TransformationRule >> parseConsequent [
-	consequentTree := self parseExpression: consequent.
+TransformationRule >> parseConsequentTree [
+	^ self parseExpression: consequent
 ]
 
 { #category : #parsing }
@@ -159,22 +134,14 @@ TransformationRule >> printOn: aStream [
 		nextPut: $).
 ]
 
-{ #category : #'ston persistence' }
-TransformationRule >> stonOn: stonWriter [
-	stonWriter writeObject: (self copy
-		antecedentTree: nil;
-		consequentTree: nil;
-		yourself)
-]
-
 { #category : #operations }
 TransformationRule >> transformedSourceCodeOf: aMethod [
 	| node rule |
 	node := aMethod parseTree.
 	
 	rule := RBParseTreeRewriter new 
-		replaceTree: antecedentTree
-		withTree: consequentTree;
+		replaceTree: self parseAntecedentTree
+		withTree: self parseConsequentTree;
 		yourself.
 	
 	RecursionStopper during: [

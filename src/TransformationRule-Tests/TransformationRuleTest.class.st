@@ -12,19 +12,13 @@ TransformationRuleTest >> mockMethod [
 
 { #category : #tests }
 TransformationRuleTest >> testAntecedent [
-	| expression rule expectedAST |
+	| expression rule |
 	expression := '`@rec doWithIndex: `@arg'.
 	
 	rule := TransformationRule new.
 	rule antecedent: expression.
 	
-	expectedAST := RBMessageNode
-		receiver: (RBPatternVariableNode named: '`@rec')
-		selector: (RBSelectorNode value: #doWithIndex:)
-		arguments: { RBPatternVariableNode named: '`@arg' }.
-	
 	self assert: rule antecedent equals: expression.
-	self assert: rule antecedentTree equals: expectedAST.
 ]
 
 { #category : #tests }
@@ -53,19 +47,13 @@ TransformationRuleTest >> testApplyTo [
 
 { #category : #tests }
 TransformationRuleTest >> testConsequent [
-	| expression rule expectedAST |
+	| expression rule |
 	expression := '`@rec withIndexDo: `@arg'.
 	
 	rule := TransformationRule new.
 	rule consequent: expression.
 	
-	expectedAST := RBMessageNode
-		receiver: (RBPatternVariableNode named: '`@rec')
-		selector: (RBSelectorNode value: #withIndexDo:)
-		arguments: { RBPatternVariableNode named: '`@arg' }.
-	
 	self assert: rule consequent equals: expression.
-	self assert: rule consequentTree equals: expectedAST.
 ]
 
 { #category : #tests }
@@ -115,6 +103,38 @@ TransformationRuleTest >> testIsValid [
 ]
 
 { #category : #tests }
+TransformationRuleTest >> testParseAntecedentTree [
+	| expression rule expectedAST |
+	expression := '`@rec doWithIndex: `@arg'.
+	
+	rule := TransformationRule new.
+	rule antecedent: expression.
+	
+	expectedAST := RBMessageNode
+		receiver: (RBPatternVariableNode named: '`@rec')
+		selector: (RBSelectorNode value: #doWithIndex:)
+		arguments: { RBPatternVariableNode named: '`@arg' }.
+	
+	self assert: rule parseAntecedentTree equals: expectedAST.
+]
+
+{ #category : #tests }
+TransformationRuleTest >> testParseConsequentTree [
+	| expression rule expectedAST |
+	expression := '`@rec withIndexDo: `@arg'.
+	
+	rule := TransformationRule new.
+	rule consequent: expression.
+	
+	expectedAST := RBMessageNode
+		receiver: (RBPatternVariableNode named: '`@rec')
+		selector: (RBSelectorNode value: #withIndexDo:)
+		arguments: { RBPatternVariableNode named: '`@arg' }.
+	
+	self assert: rule parseConsequentTree equals: expectedAST.
+]
+
+{ #category : #tests }
 TransformationRuleTest >> testSton [
 	| originalObject stonString recoveredObject |
 	
@@ -124,8 +144,4 @@ TransformationRuleTest >> testSton [
 	recoveredObject := STON fromString: stonString.
 	
 	self assert: recoveredObject equals: originalObject.
-	
-	"We need to check ASTs separately because they are ignored by equality operator"
-	self assert: recoveredObject antecedentTree equals: originalObject antecedentTree.
-	self assert: recoveredObject consequentTree equals: originalObject consequentTree.
 ]
