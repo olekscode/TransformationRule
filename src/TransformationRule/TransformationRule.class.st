@@ -17,6 +17,16 @@ TransformationRule class >> antecedent: anAntecedentString consequent: aConseque
 		yourself.
 ]
 
+{ #category : #'instance creation' }
+TransformationRule class >> fromString: aString [
+	| parts |
+	parts := '->' split: aString.
+	
+	^ self
+		antecedent: parts first trimBoth
+		consequent: parts second trimBoth.
+]
+
 { #category : #comparing }
 TransformationRule >> = anObject [
 	anObject class = self class
@@ -44,6 +54,11 @@ TransformationRule >> applyTo: aMethod [
 	Author 
 		useAuthor: 'TransformationRule'
 		during: [ aMethod origin compile: transformedCode classified: aMethod protocol ].
+]
+
+{ #category : #converting }
+TransformationRule >> asString [
+	^ antecedent, ' -> ', consequent
 ]
 
 { #category : #testing }
@@ -125,9 +140,7 @@ TransformationRule >> printOn: aStream [
 	aStream 
 		nextPutAll: self class name;
 		nextPutAll: ' (';
-		nextPutAll: antecedent;
-		nextPutAll: ' -> ';
-		nextPutAll: consequent;
+		nextPutAll: self asString;
 		nextPut: $).
 ]
 

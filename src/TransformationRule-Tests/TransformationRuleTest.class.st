@@ -46,6 +46,17 @@ TransformationRuleTest >> testApplyTo [
 ]
 
 { #category : #tests }
+TransformationRuleTest >> testAsString [
+	| rule |
+	
+	rule := TransformationRule
+		antecedent: '`@rec doWithIndex: `@arg'
+		consequent: '`@rec withIndexDo: `@arg'.
+	
+	self assert: rule asString equals: '`@rec doWithIndex: `@arg -> `@rec withIndexDo: `@arg'.
+]
+
+{ #category : #tests }
 TransformationRuleTest >> testConsequent [
 	| expression rule |
 	expression := '`@rec withIndexDo: `@arg'.
@@ -78,6 +89,19 @@ TransformationRuleTest >> testEquality [
 	self deny: rule3 equals: rule1.
 	self deny: rule4 equals: rule1.
 	self deny: rule5 equals: rule1.
+]
+
+{ #category : #tests }
+TransformationRuleTest >> testFromString [
+	| rule expected |
+	
+	rule := TransformationRule fromString: '`@rec doWithIndex: `@arg -> `@rec withIndexDo: `@arg'.
+	
+	expected := TransformationRule
+		antecedent: '`@rec doWithIndex: `@arg'
+		consequent: '`@rec withIndexDo: `@arg'.
+	
+	self assert: rule equals: expected.
 ]
 
 { #category : #tests }
