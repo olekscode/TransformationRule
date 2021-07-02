@@ -81,6 +81,12 @@ TransformationRule >> hasParsingError [
 	^ parseError
 ]
 
+{ #category : #comparing }
+TransformationRule >> hash [ 
+
+	^ antecedent hash bitXor: consequent hash
+]
+
 { #category : #initialization }
 TransformationRule >> initialize [
 	super initialize.
